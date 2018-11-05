@@ -19,7 +19,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "Keyboard.h"
+#include "KeyboardWithLayout.h"
 
 #if defined(_USING_HID)
 
@@ -60,30 +60,35 @@ static const uint8_t _hidReportDescriptor[] PROGMEM = {
     0xc0,                          // END_COLLECTION
 };
 
-Keyboard_::Keyboard_(void) 
+KeyboardWithLayout_::KeyboardWithLayout_(void) 
 {
 	static HIDSubDescriptor node(_hidReportDescriptor, sizeof(_hidReportDescriptor));
 	HID().AppendDescriptor(&node);
 }
 
-void Keyboard_::begin(void)
+void KeyboardWithLayout_::begin(void)
 {
 }
 
-void Keyboard_::end(void)
+void KeyboardWithLayout_::end(void)
 {
 }
 
-void Keyboard_::sendReport(KeyReport* keys)
+void KeyboardWithLayout_::sendReport(KeyReport* keys)
 {
 	HID().SendReport(2,keys,sizeof(KeyReport));
 }
 
 extern
-const uint8_t _asciimap[128] PROGMEM;
+const uint8_t _asciimap_en[128] PROGMEM;
+
+extern
+const uint8_t _asciimap_fr[128] PROGMEM;
+
+
 
 #define SHIFT 0x80
-const uint8_t _asciimap[128] =
+const uint8_t _asciimap_en[128] =
 {
 	0x00,             // NUL
 	0x00,             // SOH
@@ -216,6 +221,138 @@ const uint8_t _asciimap[128] =
 	0				// DEL
 };
 
+const uint8_t _asciimap_fr[128] =
+{
+
+	0x00,             // NUL
+	0x00,             // SOH
+	0x00,             // STX
+	0x00,             // ETX
+	0x00,             // EOT
+	0x00,             // ENQ
+	0x00,             // ACK  
+	0x00,             // BEL
+	0x2a,			// BS	Backspace
+	0x2b,			// TAB	Tab
+	0x28,			// LF	Enter
+	0x00,             // VT 
+	0x00,             // FF 
+	0x00,             // CR 
+	0x00,             // SO 
+	0x00,             // SI 
+	0x00,             // DEL
+	0x00,             // DC1
+	0x00,             // DC2
+	0x00,             // DC3
+	0x00,             // DC4
+	0x00,             // NAK
+	0x00,             // SYN
+	0x00,             // ETB
+	0x00,             // CAN
+	0x00,             // EM 
+	0x00,             // SUB
+	0x00,             // ESC
+	0x00,             // FS 
+	0x00,             // GS 
+	0x00,             // RS 
+	0x00,             // US 
+	0x2c,		   //  ' '
+	0x38,	   // !
+	0x20,	   // "
+	0x20,    // # => ALTGR Modifier does not exist so its called in the press function
+	0x30,    // $
+	0x34|SHIFT,    // %
+	0x1e,    // &
+	0x21,          // '
+	0x22,    // (
+	0x2d,    // )
+	0x31,    // *
+	0x2e|SHIFT,    // +
+	0x10,          // ,
+	0x23,          // -
+	0x36|SHIFT,          // .
+	0x37|SHIFT,          // /
+	0x27|SHIFT,          // 0
+	0x1e|SHIFT,          // 1
+	0x1f|SHIFT,          // 2
+	0x20|SHIFT,          // 3
+	0x21|SHIFT,          // 4
+	0x22|SHIFT,          // 5
+	0x23|SHIFT,          // 6
+	0x24|SHIFT,          // 7
+	0x25|SHIFT,          // 8
+	0x26|SHIFT,          // 9
+	0x37,      // :
+	0x36,          // ;
+	0x64,      // <
+	0x2e,          // =
+	0x64|SHIFT,      // >
+	0x10|SHIFT,      // ?
+	0x27,      // @ => ALTGR Modifier does not exist so its called in the press function
+	0x14|SHIFT,      // A
+	0x05|SHIFT,      // B
+	0x06|SHIFT,      // C
+	0x07|SHIFT,      // D
+	0x08|SHIFT,      // E
+	0x09|SHIFT,      // F
+	0x0a|SHIFT,      // G
+	0x0b|SHIFT,      // H
+	0x0c|SHIFT,      // I
+	0x0d|SHIFT,      // J
+	0x0e|SHIFT,      // K
+	0x0f|SHIFT,      // L
+	0x33|SHIFT,      // M
+	0x11|SHIFT,      // N
+	0x12|SHIFT,      // O
+	0x13|SHIFT,      // P
+	0x04|SHIFT,      // Q
+	0x15|SHIFT,      // R
+	0x16|SHIFT,      // S
+	0x17|SHIFT,      // T
+	0x18|SHIFT,      // U
+	0x19|SHIFT,      // V
+	0x1d|SHIFT,      // W
+	0x1b|SHIFT,      // X
+	0x1c|SHIFT,      // Y
+	0x1a|SHIFT,      // Z
+	0x22,          // [ => ALTGR Modifier does not exist so its called in the press function
+	0x25,          // bslash => ALTGR Modifier does not exist so its called in the press function
+	0x2d,          // ] => ALTGR Modifier does not exist so its called in the press function
+	0x2f,    // ^
+	0x25,    // _
+	0x24,          // `  => ALTGR Modifier does not exist so its called in the press function, to be print space key must be press after
+	0x14,          // a
+	0x05,          // b
+	0x06,          // c
+	0x07,          // d
+	0x08,          // e
+	0x09,          // f
+	0x0a,          // g
+	0x0b,          // h
+	0x0c,          // i
+	0x0d,          // j
+	0x0e,          // k
+	0x0f,          // l
+	0x33,          // m
+	0x11,          // n
+	0x12,          // o
+	0x13,          // p
+	0x04,          // q
+	0x15,          // r
+	0x16,          // s
+	0x17,          // t
+	0x18,          // u
+	0x19,          // v
+	0x1d,          // w
+	0x1b,          // x
+	0x1c,          // y
+	0x1a,          // z
+	0x21,    // { => ALTGR Modifier does not exist so its called in the press function
+	0x23,    // | => ALTGR Modifier does not exist so its called in the press function
+	0x2e,    // } => ALTGR Modifier does not exist so its called in the press function
+	0x1f,    // ~ => ALTGR Modifier does not exist so its called in the press function, to be print space key must be press after
+	0				// DEL
+};
 
 uint8_t USBPutChar(uint8_t c);
 
@@ -223,7 +360,7 @@ uint8_t USBPutChar(uint8_t c);
 // to the persistent key report and sends the report.  Because of the way 
 // USB HID works, the host acts like the key remains pressed until we 
 // call release(), releaseAll(), or otherwise clear the report and resend.
-size_t Keyboard_::press(uint8_t k) 
+size_t KeyboardWithLayout_::press(uint8_t k, int layout=EN_ENGLISH) 
 {
 	uint8_t i;
 	if (k >= 136) {			// it's a non-printing key (not a modifier)
@@ -232,7 +369,14 @@ size_t Keyboard_::press(uint8_t k)
 		_keyReport.modifiers |= (1<<(k-128));
 		k = 0;
 	} else {				// it's a printing key
-		k = pgm_read_byte(_asciimap + k);
+		if (layout == EN_ENGLISH)
+			k = pgm_read_byte(_asciimap_en + k);
+		if (layout == FR_FRENCH) {
+			if (k == 35 || k == 64 || k == 91 || k == 92 || k == 93 || k == 96 || (k >= 123 && k < 127) ) {
+				_keyReport.modifiers |= (1<<(KEY_RIGHT_ALT-128));
+			}
+			k = pgm_read_byte(_asciimap_fr + k);
+		}
 		if (!k) {
 			setWriteError();
 			return 0;
@@ -242,7 +386,7 @@ size_t Keyboard_::press(uint8_t k)
 			k &= 0x7F;
 		}
 	}
-	
+
 	// Add k to the key report only if it's not already present
 	// and if there is an empty slot.
 	if (_keyReport.keys[0] != k && _keyReport.keys[1] != k && 
@@ -267,7 +411,7 @@ size_t Keyboard_::press(uint8_t k)
 // release() takes the specified key out of the persistent key report and
 // sends the report.  This tells the OS the key is no longer pressed and that
 // it shouldn't be repeated any more.
-size_t Keyboard_::release(uint8_t k) 
+size_t KeyboardWithLayout_::release(uint8_t k) 
 {
 	uint8_t i;
 	if (k >= 136) {			// it's a non-printing key (not a modifier)
@@ -276,7 +420,7 @@ size_t Keyboard_::release(uint8_t k)
 		_keyReport.modifiers &= ~(1<<(k-128));
 		k = 0;
 	} else {				// it's a printing key
-		k = pgm_read_byte(_asciimap + k);
+		k = pgm_read_byte(_asciimap_en + k);
 		if (!k) {
 			return 0;
 		}
@@ -298,7 +442,7 @@ size_t Keyboard_::release(uint8_t k)
 	return 1;
 }
 
-void Keyboard_::releaseAll(void)
+void KeyboardWithLayout_::releaseAll(void)
 {
 	_keyReport.keys[0] = 0;
 	_keyReport.keys[1] = 0;	
@@ -310,13 +454,34 @@ void Keyboard_::releaseAll(void)
 	sendReport(&_keyReport);
 }
 
-size_t Keyboard_::write(uint8_t c)
+size_t KeyboardWithLayout_::write(uint8_t c)
 {	
 	uint8_t p = press(c);  // Keydown
 	release(c);            // Keyup
 	return p;              // just return the result of press() since release() almost always returns 1
 }
 
-Keyboard_ Keyboard;
+void KeyboardWithLayout_::sendPayload(const String &payload, int layout=EN_ENGLISH)
+{
+
+	for (int i = 0 ; i < payload.length(); i++) {
+		press(int(payload[i]), layout);
+		
+		if (layout == FR_FRENCH) {
+			if (payload[i] == '^'){
+				delay(10);
+				press(' ', FR_FRENCH);
+			} else if (payload[i] == '`' or payload[i] == '~') {
+				releaseAll();
+				press(' ', FR_FRENCH);
+			}
+		}
+		
+		releaseAll();
+	}
+
+}
+
+KeyboardWithLayout_ KeyboardWithLayout;
 
 #endif
